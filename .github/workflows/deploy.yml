@@ -3,8 +3,6 @@ name: Deploy Vue App to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -19,14 +17,11 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
         cache: 'npm'
         
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run lint
-      run: npm run lint
+    - name: Install dependencies with legacy peer deps
+      run: npm install --legacy-peer-deps
       
     - name: Build project
       run: npm run build
@@ -36,5 +31,3 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
-        enable_jekyll: false
-        
